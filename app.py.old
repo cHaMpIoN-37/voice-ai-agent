@@ -1,0 +1,170 @@
+import streamlit as st
+import os
+import time
+from pathlib import Path
+from faster_whisper import WhisperModel
+import ollama
+import sounddevice as sd
+import scipy.io.wavfile as wav
+import numpy as np
+from pydub import AudioSegment
+import tempfile
+
+# ===================== CONFIG =====================
+st.set_page_config(page_title="Voice AI Agent", page_icon="🎙️", layout="wide")
+st.title("🎙️ Voice-Controlled Local AI Agent")
+st.markdown("### Built for Mem0 AI / Internshala Internship Assignment")
+
+# Create output directory safely
+OUTPUT_DIR = Path("output")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+# ===================== HELPERS =====================
+@st.cache_resource
+def load_whisper_model():
+    return WhisperModel("small", device="cpu", compute_type="int8")
+
+whisper_model = load_whisper_model()
+
+def transcribe_audio(audio_path):
+    segments, info = whisper_model.transcribe(audio_path, beam_size=5, language="en")
+    text = " ".join([segment.text for segment in segments])
+    return text.strip()
+
+def get_intent_and_action(user_text):
+    prompt = f"""
+You are an intelligent AI agent. Classify the user's intent from the text and decide the action.
+
+Supported Intents:
+1. create_file - Create a new empty file
+2. write_code - Write code to a new or existing file
+3. summarize - Summarize the given text
+4. general_chat - Normal conversation
+
+User Input: "{user_text}"
+
+Respond in strict JSON format only:
+{{
+  "intent": "create_file | write_code | summarize | general_chat",
+  "filename": "optional filename if needed",
+  "content": "code or summary content if applicable",
+  "response": "short response to user"
+}}
+
+JSON:
+"""
+    
+    try:
+        response = ollama.chat(
+            model='phi3:mini',
+            messages=[{'role': 'user', 'content': prompt}],
+            options={"num_gpu_layers": 0}   # Force CPU mode
+        )
+        # Extract JSON from response
+        import json
+        text = response['message']['content']
+        # Find JSON part
+        start = text.find('{')
+        end = text.rfind('}') + 1
+        json_str = text[start:end]
+        return json.loads(json_str)
+    except:
+        return {
+            "intent": "general_chat",
+            "filename": None,
+            "content": None,
+            "response": "Sorry, I couldn't understand the intent clearly."
+        }
+
+def execute_action(intent_data):
+    intent = intent_data.get("intent", "general_chat")
+    filename = intent_data.get("filename")
+    content = intent_data.get("content")
+    response = intent_data.get("response", "")
+
+    if intent == "create_file" and filename:
+        file_path = OUTPUT_DIR / filename
+        file_path.touch(exist_ok=True)
+        return f"✅ File created successfully: `{filename}`", str(file_path)
+
+    elif intent == "write_code" and filename and content:
+        file_path = OUTPUT_DIR / filename
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        return f"✅ Code written successfully to `{filename}`", str(file_path)
+
+    elif intent == "summarize" and content:
+        return f"📝 Summary:\n{content}", "Text summarized"
+
+    else:
+        return response, "General chat response"
+
+# ===================== UI =====================
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    st.subheader("🎤 Record Audio")
+    if st.button("🎙️ Start Recording (5 seconds)", type="primary"):
+        with st.spinner("Recording... Speak now"):
+            fs = 16000
+            duration = 5
+            recording = sd.rec(int(duration * fs), samplerate=fs, channels=1, dtype='float32')
+            sd.wait()
+            
+            # Save recording
+            temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+            wav.write(temp_wav.name, fs, recording)
+            
+            st.success("Recording completed!")
+            audio_path = temp_wav.name
+
+with col2:
+    st.subheader("📁 Upload Audio File")
+    uploaded_file = st.file_uploader("Upload .wav or .mp3 file", type=["wav", "mp3"])
+
+    if uploaded_file:
+        temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+        if uploaded_file.name.endswith(".mp3"):
+            audio = AudioSegment.from_mp3(uploaded_file)
+            audio.export(temp_wav.name, format="wav")
+        else:
+            temp_wav.write(uploaded_file.getvalue())
+        audio_path = temp_wav.name
+        st.success("File uploaded successfully!")
+
+# Process Audio
+if 'audio_path' in locals() and audio_path:
+    if st.button("🚀 Process Audio", type="primary"):
+        with st.spinner("Transcribing audio..."):
+            text = transcribe_audio(audio_path)
+        
+        st.subheader("📝 Transcribed Text")
+        st.write(text)
+
+        with st.spinner("Understanding intent..."):
+            intent_data = get_intent_and_action(text)
+        
+        st.subheader("🎯 Detected Intent")
+        st.json(intent_data)
+
+        with st.spinner("Executing action..."):
+            result, details = execute_action(intent_data)
+        
+        st.subheader("✅ Action Result")
+        st.success(result)
+        
+        if "output/" in details:
+            st.info(f"File saved at: `{details}`")
+
+        # Show files in output folder
+        st.subheader("📂 Files in output/ folder")
+        files = list(OUTPUT_DIR.glob("*"))
+        if files:
+            for f in files:
+                st.write(f"• {f.name}")
+        else:
+            st.write("No files yet.")
+
+# Footer
+st.markdown("---")
+st.caption("Voice AI Agent | Local STT (faster-whisper) + Ollama (phi3:mini on CPU)")
