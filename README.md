@@ -4,6 +4,9 @@
 
 A sophisticated, production-ready voice AI agent that runs entirely on your local machine. No cloud dependencies, no API keys, no data leaving your computer.
 
+<img width="1915" height="933" alt="Screenshot from 2026-04-13 05-10-27" src="https://github.com/user-attachments/assets/663357b6-fca9-45c7-aef7-eb47933acdde" />
+
+
 ##  Features
 
 ### Core Functionality
@@ -20,7 +23,6 @@ A sophisticated, production-ready voice AI agent that runs entirely on your loca
 
 ### Bonus Features Implemented 
 1. ** Graceful Error Handling**: Comprehensive try-catch blocks, input validation, sanitization
-2. ** Input Validation**: Filename sanitization, path traversal prevention, content length limits
 
 ##  Quick Start
 
