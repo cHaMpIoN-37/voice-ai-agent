@@ -18,12 +18,9 @@ A sophisticated, production-ready voice AI agent that runs entirely on your loca
 -  **Safety Guarantees**: All file operations strictly confined to `./output/` folder
 -  **Clean UI**: Professional Streamlit interface with real-time feedback
 
-### Bonus Features Implemented ⭐
-1. ** Human-in-the-Loop Confirmation**: Explicit user confirmation before any file operation (create/write)
-2. ** Graceful Error Handling**: Comprehensive try-catch blocks, input validation, sanitization
-3. ** Input Validation**: Filename sanitization, path traversal prevention, content length limits
-4. ** Detailed Logging**: Track all operations for debugging and transparency
-5. ** State Management**: Proper Streamlit session state to avoid reprocessing
+### Bonus Features Implemented 
+1. ** Graceful Error Handling**: Comprehensive try-catch blocks, input validation, sanitization
+2. ** Input Validation**: Filename sanitization, path traversal prevention, content length limits
 
 ##  Quick Start
 
