@@ -1,31 +1,31 @@
-# 🎙️ Voice-Controlled Local AI Agent
+# Voice-Controlled Local AI Agent
 
 **Mem0 AI & Internshala Internship Assignment**
 
 A sophisticated, production-ready voice AI agent that runs entirely on your local machine. No cloud dependencies, no API keys, no data leaving your computer.
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
-- 🎤 **Audio Input**: Real-time microphone recording + file upload (.wav, .mp3)
-- 🗣️ **Speech-to-Text**: Fast, accurate local transcription using **faster-whisper** (small model, 8-bit quantized)
-- 🧠 **Intent Classification**: Local LLM-powered intent detection using **Ollama phi3:mini**
-- 🔧 **Multi-Intent Support**:
-  - 📝 Create empty files
-  - 💾 Write code to files
-  - 📋 Summarize text
-  - 💬 General conversation
-- 🛡️ **Safety Guarantees**: All file operations strictly confined to `./output/` folder
-- 🎨 **Clean UI**: Professional Streamlit interface with real-time feedback
+-  **Audio Input**: Real-time microphone recording + file upload (.wav, .mp3)
+-  **Speech-to-Text**: Fast, accurate local transcription using **faster-whisper** (small model, 8-bit quantized)
+-  **Intent Classification**: Local LLM-powered intent detection using **Ollama phi3:mini**
+-  **Multi-Intent Support**:
+  -  Create empty files
+  -  Write code to files
+  -  Summarize text
+  -  General conversation
+-  **Safety Guarantees**: All file operations strictly confined to `./output/` folder
+-  **Clean UI**: Professional Streamlit interface with real-time feedback
 
 ### Bonus Features Implemented ⭐
-1. **🔐 Human-in-the-Loop Confirmation**: Explicit user confirmation before any file operation (create/write)
-2. **🚨 Graceful Error Handling**: Comprehensive try-catch blocks, input validation, sanitization
-3. **📝 Input Validation**: Filename sanitization, path traversal prevention, content length limits
-4. **📊 Detailed Logging**: Track all operations for debugging and transparency
-5. **🔄 State Management**: Proper Streamlit session state to avoid reprocessing
+1. ** Human-in-the-Loop Confirmation**: Explicit user confirmation before any file operation (create/write)
+2. ** Graceful Error Handling**: Comprehensive try-catch blocks, input validation, sanitization
+3. ** Input Validation**: Filename sanitization, path traversal prevention, content length limits
+4. ** Detailed Logging**: Track all operations for debugging and transparency
+5. ** State Management**: Proper Streamlit session state to avoid reprocessing
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Python 3.8+
@@ -72,7 +72,7 @@ A sophisticated, production-ready voice AI agent that runs entirely on your loca
    http://localhost:8501
    ```
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 Voice Input (Mic/Upload)
@@ -118,7 +118,7 @@ Voice Input (Mic/Upload)
 | **Intent Detection** | Ollama + phi3:mini | CPU | LLM-based classification |
 | **File Operations** | Python pathlib | Local | Safe file management |
 
-## 💻 Why CPU Mode for Ollama?
+##  Why CPU Mode for Ollama?
 
 The phi3:mini model runs on **CPU mode** due to a compatibility issue with Ollama's GPU runner on certain systems.
 
@@ -143,7 +143,7 @@ options={"num_gpu_layers": 0}  # Force CPU computation
 - Intent detection: ~1-2 seconds
 - Total pipeline: ~3-5 seconds
 
-## 🔐 Security Features
+##  Security Features
 
 1. **Path Sanitization**
    - Filenames validated against regex: `^[a-zA-Z0-9._\-]+$`
@@ -165,7 +165,7 @@ options={"num_gpu_layers": 0}  # Force CPU computation
    - Full JSON intent display for transparency
    - File size display in output folder
 
-## 📋 Supported Intents
+##  Supported Intents
 
 ### 1. Create File
 ```
@@ -200,7 +200,7 @@ options={"num_gpu_layers": 0}  # Force CPU computation
 → Action: Display response
 ```
 
-## 🧪 Testing the Application
+##  Testing the Application
 
 ### Test Case 1: Create File
 ```
@@ -233,19 +233,19 @@ options={"num_gpu_layers": 0}  # Force CPU computation
 3. View conversational response
 ```
 
-## 📊 Example Output
+##  Example Output
 
 ```
-✅ Code written successfully to `fibonacci.py` (245 bytes)
+ Code written successfully to `fibonacci.py` (245 bytes)
 
 File path: /home/hannan/Mem0 AI _ Internshala/assignment/voice-ai-agent/output/fibonacci.py
 
-📂 Output Folder Contents
+ Output Folder Contents
 Found 1 file(s) in `output/` folder
 1. `fibonacci.py` (245 bytes)
 ```
 
-## 🛠️ Troubleshooting
+##  Troubleshooting
 
 ### Issue: "ModuleNotFoundError: No module named 'ollama'"
 **Solution:**
@@ -290,26 +290,26 @@ choco install ffmpeg
 - Speak clearly and at normal pace
 - Try uploading a .wav file of better quality
 
-## 📈 Performance Optimization
+##  Performance Optimization
 
 For improved speed on slower machines:
 1. Use `device="cuda"` in `load_whisper_model()` (requires NVIDIA GPU + CUDA)
 2. Switch to `faster-whisper` tiny model: `WhisperModel("tiny")`
 3. Increase `num_gpu_layers` in Ollama options (if using GPU)
 
-## 🎓 Learning Outcomes
+##  Learning Outcomes
 
 This project demonstrates:
-- ✅ Local LLM inference with Ollama
-- ✅ Speech recognition with faster-whisper
-- ✅ Intent classification and NLP
-- ✅ Real-time streaming UI with Streamlit
-- ✅ Security best practices (path sanitization, input validation)
-- ✅ Error handling and logging
-- ✅ State management in web applications
-- ✅ Hardware-aware optimization (CPU mode for compatibility)
+-  Local LLM inference with Ollama
+-  Speech recognition with faster-whisper
+-  Intent classification and NLP
+-  Real-time streaming UI with Streamlit
+-  Security best practices (path sanitization, input validation)
+-  Error handling and logging
+-  State management in web applications
+-  Hardware-aware optimization (CPU mode for compatibility)
 
-## 📝 Project Structure
+##  Project Structure
 
 ```
 voice-ai-agent/
@@ -322,7 +322,7 @@ voice-ai-agent/
     └── ...
 ```
 
-## 🚀 Future Enhancements
+##  Future Enhancements
 
 - [ ] Support for compound commands ("Create a file AND write code to it")
 - [ ] Multi-language support (Spanish, French, etc.)
@@ -333,14 +333,8 @@ voice-ai-agent/
 - [ ] Web API for remote access (with authentication)
 - [ ] Docker containerization for easy deployment
 
-## 📜 License
+##  License
 
-This project is part of the Mem0 AI & Internshala Internship program.
+This project is part of the Mem0 AI &  Internship Assigment.
 
-## 👨‍💻 Author
 
-Built with ❤️ for the Mem0 AI internship assignment.
-
----
-
-**Made with attention to detail for maximum impact.** 🚀
