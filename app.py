@@ -13,14 +13,14 @@ import tempfile
 import re
 from typing import Dict, Tuple, Optional
 
-# ===================== LOGGING SETUP =====================
+#   LOGGING SETUP 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("VoiceAIAgent")
 
-# ===================== CONFIG =====================
+#  CONFIG
 st.set_page_config(page_title="Voice AI Agent", page_icon="🦾", layout="wide")
 st.title("Voice-Controlled Local AI Agent")
 st.markdown("### Built for Mem0 AI / Internshala Internship Assignment")
@@ -34,7 +34,7 @@ SUPPORTED_INTENTS = {"create_file", "write_code", "summarize", "general_chat"}
 MAX_FILENAME_LENGTH = 100
 MAX_CONTENT_LENGTH = 50000
 
-# ===================== SESSION STATE MANAGEMENT =====================
+#     SESSION STATE MANAGEMENT
 if "audio_path" not in st.session_state:
     st.session_state.audio_path = None
 if "transcribed_text" not in st.session_state:
@@ -490,7 +490,7 @@ def execute_action(intent_data: Dict) -> Tuple[str, str]:
         logger.error(error_msg)
         return error_msg, ""
 
-# ===================== UI - SIDEBAR =====================
+#     UI - SIDEBAR 
 st.sidebar.markdown("## ⚙️ Settings")
 st.sidebar.info(
     """
@@ -507,7 +507,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### Pipeline:")
 st.sidebar.markdown("1️⃣ Audio Input → 2️⃣ Transcription → 3️⃣ Intent Detection → 4️⃣ Confirmation → 5️⃣ Execution")
 
-# ===================== UI - AUDIO INPUT =====================
+#     UI - AUDIO INPUT 
 st.markdown("## 🎙️ Audio Input")
 col1, col2 = st.columns([1, 1])
 
@@ -566,7 +566,7 @@ with col2:
             logger.error(f"File upload failed: {e}")
             st.session_state.audio_path = None
 
-# ===================== UI - AUDIO PROCESSING =====================
+#       UI - AUDIO PROCESSING 
 if st.session_state.audio_path:
     st.markdown("## Process Audio")
     
@@ -630,7 +630,7 @@ if st.session_state.audio_path:
         if details and "output/" in details:
             st.info(f"📁 File path: `{details}`")
 
-# ===================== UI - OUTPUT FOLDER =====================
+#        UI - OUTPUT FOLDER 
 st.markdown("---")
 st.markdown("## 📂 Output Folder Contents")
 
@@ -654,7 +654,7 @@ except Exception as e:
     st.error(f"❌ Error reading output folder: {e}")
     logger.error(f"Error listing output files: {e}")
 
-# ===================== FOOTER =====================
+#       FOOTER 
 st.markdown("---")
 col_footer1, col_footer2, col_footer3 = st.columns([1, 1, 1])
 with col_footer1:
