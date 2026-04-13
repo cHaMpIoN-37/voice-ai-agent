@@ -137,7 +137,7 @@ options={"num_gpu_layers": 0}  # Force CPU computation
 - CPU execution is **deterministic and reliable**
 - Trade-off: ~0.5-1 second slower per inference (acceptable for voice agent)
 
-### Performance (Measured on Intel i7)
+### Performance (Measured on Intel i3 7020U)
 - Transcription (5s audio): ~2-3 seconds
 - Intent detection: ~1-2 seconds
 - Total pipeline: ~3-5 seconds
@@ -327,7 +327,6 @@ voice-ai-agent/
 - [ ] Multi-language support (Spanish, French, etc.)
 - [ ] Voice output (text-to-speech feedback)
 - [ ] Command history and favorites
-- [ ] Advanced intent extraction with few-shot examples
 - [ ] Integration with local vector database for memory/context
 - [ ] Web API for remote access (with authentication)
 - [ ] Docker containerization for easy deployment
